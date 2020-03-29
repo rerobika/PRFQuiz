@@ -1,46 +1,43 @@
 
 import Router from 'express';
 import userModel from '../models/user'
+import questionModel from '../models/question';
 
 const router = Router();
 
 router.post('/add', (req, res) => {
-  // let {username, password, passwordConfirm, role} = req.body;
+  let {question, answers} = req.body;
 
-  // console.log (req.body);
-  // if (!username
-  //     || !password
-  //     || !passwordConfirm
-  //     || !role)
-  // {
-  //   return res.status(403).send("Missing register attributes");
-  // }
+  console.log (req.body);
 
-  // if (password != passwordConfirm) {
-  //   return res.status(403).send("Passwords do not match");
-  // }
+  if (!question || !answers)
+  {
+    return res.status(403).send("Missing question attributes");
+  }
 
-  // if (password.length < 5) {
-  //   return res.status(403).send("Passwords is too short.");
-  // }
+  if (question.length == 0) {
+    return res.status(403).send("Empty question");
+  }
 
-  // if (!["player", "admin"].includes(role)) {
-  //   return res.status(403).send("Invalid role");
-  // }
+  for (let a of answers) {
+    if (a.answer.length == 0) {
+      return res.status(403).send("Empty answer");
+    }
+  }
 
-  // userModel.findOne({username}, (err, user) => {
-  //   if (err) {
-  //     return res.status(500).send("Internal error");
-  //   }
+  questionModel.findOne({question}, (err, user) => {
+    if (err) {
+      return res.status(500).send("Internal error");
+    }
 
-  //   if (user) {
-  //     return res.status(403).send("User alerady exists");
-  //   }
+    if (user) {
+      return res.status(403).send("Question alerady exists");
+    }
 
-  //   userModel.create(new userModel ({ username, password, role}));
+    questionModel.create(new questionModel ({ question, answers }));
 
-  //   return res.status(200).send("");
-  // });
+    return res.status(200).send("");
+  });
 });
 
 export default router;

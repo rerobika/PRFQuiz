@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.userService.logout();
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'home';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
   }
 
   onFormSubmit(username: string, password: string): void {
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
       this._snackBar.open("Succesful registration,", "please login", {
         duration: 2000,
       });
-      this.router.navigateByUrl(this.returnUrl);
+      this.router.navigateByUrl(this.returnUrl || this.userService.loginRedirect());
     }, err => {
       this._snackBar.open("Error:", err.error, {
         duration: 2000,

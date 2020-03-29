@@ -1,1 +1,31 @@
-<p>admin works!</p>
+<div>
+  <h1>Admin</h1>
+</div>
+<div class="container">
+  <div class="left first-row">
+    <button mat-raised-button color="primary" (click)="onUpperButton()">{{upperButtonDesc}}</button>
+  </div>
+  <div class="center first-row">
+    <mat-form-field *ngIf="answers.length !== 0">
+      <input matInput [(ngModel)]="question" type="string">
+      <mat-hint>Question</mat-hint>
+    </mat-form-field>
+  </div>
+  <div class="center second-row">
+    <div *ngFor="let a of answers; let i = index">
+      <mat-form-field >
+          <input matInput type="string" [(ngModel)]="a.answer">
+          <mat-hint>Answer #{{i + 1}}</mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="right second-row">
+    <div *ngFor="let a of answers; let i = index">
+      <mat-checkbox [(ngModel)]="a.correct">#{{i + 1}} is correct</mat-checkbox>
+    </div>
+  </div>
+  <div class="left second-row">
+    <button mat-raised-button color="primary" (click)="onLowerButton()">{{lowerButtonDesc}}</button>
+  </div>
+  </div>
+<router-outlet></router-outlet>

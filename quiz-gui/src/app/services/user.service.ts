@@ -29,7 +29,11 @@ export class UserService {
     return this.http.post<any>(`${environment.apiUrl}/register`, {username, password, passwordConfirm, role});
   }
 
-  logout() {
+  logout(): void {
     this.cookieService.deleteCookie("user.role");
+  }
+
+  loginRedirect():string {
+    return this.cookieService.getCookie("user.role");
   }
 }
