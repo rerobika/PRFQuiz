@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import { questionSchema } from './test'
 
 const quizSchema = new mongoose.Schema({
-  questions: [questionSchema, {required: true}]
+  name: {type: String, unique: true, required: true},
+  tests: [{type: mongoose.Schema.Types.ObjectId, ref: 'test' }]
 });
 
 const quizModel = mongoose.model('quiz', quizSchema);

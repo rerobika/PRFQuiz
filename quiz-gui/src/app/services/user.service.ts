@@ -16,9 +16,8 @@ export class UserService {
     return this.http.post<any>(`${environment.apiUrl}/login`, {username, password})
     .pipe(map(
       user => {
-        console.log (user);
         if (user) {
-            this.cookieService.setCookie("user.role", user.role);
+          this.cookieService.setCookie("user.role", user.role);
         }
         return user;
       }

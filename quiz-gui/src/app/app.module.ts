@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -58,6 +59,7 @@ const appRoutes: Routes = [
     MatSnackBarModule,
     MatCheckboxModule,
     MatRadioModule,
+    MatDividerModule,
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule

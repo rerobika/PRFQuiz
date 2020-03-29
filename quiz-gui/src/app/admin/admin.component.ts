@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TestService, Test } from '../services/test.service';
+import { TestService, Test, Quiz } from '../services/test.service';
 import { first } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -10,9 +10,9 @@ enum BUTTON_MODE {
 };
 
 const buttonDescs = [
-  [ "New question",  "New quiz"],
-  [ "Add answer",  "Save question"],
-  [ "Save quiz",  "Add question"],
+  [ "New Test", "New Quiz" ],
+  [ "Delete",  "Cancel"],
+  [ "", "Cancel" ],
 ]
 
 @Component({
@@ -22,16 +22,15 @@ const buttonDescs = [
 })
 
 export class AdminComponent implements OnInit {
-  question: Test;
+  test: Test;
+  quiz: Quiz;
   mode: BUTTON_MODE;
   upperButtonDesc: string;
   lowerButtonDesc: string;
 
-  constructor(private questionService: TestService,
+  constructor(private testService: TestService,
               private _snackBar: MatSnackBar) {
-    this.updateMode(BUTTON_MODE.INIT);
-    this.question = { question: "", answers: [] };
-    console.log (this.mode);
+    this.resetState ();
   }
 
   ngOnInit(): void {
@@ -47,9 +46,13 @@ export class AdminComponent implements OnInit {
     switch (this.mode) {
       case BUTTON_MODE.INIT: {
         this.updateMode(BUTTON_MODE.QUESTION);
+        this.addAnswer();
+        break;
       }
       case BUTTON_MODE.QUESTION: {
-        this.question.answers.push({answer: "", correct : false});
+        if (this.test.answers.length > 1) {
+          this.test.answers.pop();
+        }
         break;
       }
       default: {
@@ -60,33 +63,73 @@ export class AdminComponent implements OnInit {
 
   resetState () {
     this.updateMode(BUTTON_MODE.INIT);
-    this.question = { question: "", answers: [] };
+    this.test = { question: "", answers: [] };
+    this.quiz = { name: "", items: [] };
+  }
+
+  addAnswer () {
+    this.test.answers.push({answer: "", correct : false});
+  }
+
+  addTest () {
+    this.testService.addTest(this.test)
+    .pipe(first())
+    .subscribe(data => {
+      this._snackBar.open("Save,", "Test added", {
+        duration: 2000,
+      });
+
+      this.resetState();
+    }, err => {
+      this._snackBar.open("Error:", err.error, {
+        duration: 2000,
+      });
+    });
+  }
+
+  addQuiz () {
+    this.testService.addQuiz(this.quiz)
+    .pipe(first())
+    .subscribe(data => {
+      this._snackBar.open("Save,", "Quiz added", {
+        duration: 2000,
+      });
+
+      this.resetState();
+    }, err => {
+      this._snackBar.open("Error:", err.error, {
+        duration: 2000,
+      });
+    });
+  }
+
+  getTests () {
+    this.testService.listTests()
+    .pipe(first())
+    .subscribe(data => {
+      for (let d of data) {
+        this.quiz.items.push ({test: d, active: false});
+      }
+    }, err => {
+      this._snackBar.open("Error:", err.error, {
+        duration: 2000,
+      });
+    });
   }
 
   onLowerButton() {
     switch (this.mode) {
       case BUTTON_MODE.INIT: {
+        this.getTests();
         this.updateMode(BUTTON_MODE.QUIZ);
+        break;
       }
-      case BUTTON_MODE.QUIZ: {
-        this.question.answers.push({answer: "", correct : false});
+      case BUTTON_MODE.QUESTION: {
+        this.resetState();
         break;
       }
       default: {
-        this.questionService.addTest(this.question)
-        .pipe(first())
-        .subscribe(data => {
-          this._snackBar.open("Save,", "question added", {
-            duration: 2000,
-          });
-
-
-        }, err => {
-          this._snackBar.open("Error:", err.error, {
-            duration: 2000,
-          });
-        });
-        this.updateMode(BUTTON_MODE.INIT);
+        this.resetState();
         break;
       }
     }

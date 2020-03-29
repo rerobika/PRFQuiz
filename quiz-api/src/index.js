@@ -28,6 +28,7 @@ app.use(passport.session());
 app.use('/login', routes.login);
 app.use('/register', routes.register);
 app.use('/tests', routes.tests);
+app.use('/quizzes', routes.quizzes);
 
 connectDB().then(async () => {
   var server = app.listen(PORT, () => {

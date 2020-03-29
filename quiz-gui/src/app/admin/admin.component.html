@@ -6,18 +6,40 @@
     <button mat-raised-button color="primary" (click)="onUpperButton()">{{upperButtonDesc}}</button>
   </div>
   <div class="center first-row">
-    <mat-form-field *ngIf="question.answers.length !== 0">
-      <input matInput [(ngModel)]="question.question" type="string">
+    <mat-form-field *ngIf="test.answers.length !== 0">
+      <input matInput [(ngModel)]="test.question" type="string">
       <mat-hint>Question</mat-hint>
+    </mat-form-field>
+    <mat-form-field *ngIf="quiz.items.length !== 0">
+      <input matInput [(ngModel)]="quiz.name" type="string">
+      <mat-hint>Quiz name</mat-hint>
     </mat-form-field>
   </div>
   <div class="center second-row">
-    <div *ngFor="let a of question.answers; let i = index">
+    <!-- New Test -->
+    <div *ngFor="let a of test.answers; let i = index">
       <mat-form-field >
         <input matInput type="string" [(ngModel)]="a.answer">
         <mat-hint>Answer #{{i + 1}}</mat-hint>
       </mat-form-field>
       <mat-checkbox [(ngModel)]="a.correct"></mat-checkbox>
+    </div>
+    <div *ngIf="test.answers.length !== 0">
+      <div>
+        <button mat-raised-button color="primary" (click)="addAnswer()">Add Answer</button>
+      </div>
+      <mat-divider></mat-divider>
+      <div>
+        <button mat-raised-button color="primary" (click)="addTest()">Save Test</button>
+      </div>
+    </div>
+
+    <!-- New Quiz -->
+    <div *ngFor="let q of quiz.items">
+      <mat-checkbox [(ngModel)]="q.active">{{q.test.question}}</mat-checkbox>
+    </div>
+    <div *ngIf="quiz.items.length !== 0">
+      <button mat-raised-button color="primary" (click)="addQuiz()">Save Quiz</button>
     </div>
   </div>
   <div class="left second-row">

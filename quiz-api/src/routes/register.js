@@ -11,8 +11,7 @@ router.post('/', (req, res) => {
   if (!username
       || !password
       || !passwordConfirm
-      || !role)
-  {
+      || !role) {
     return res.status(403).send("Missing register attributes");
   }
 
@@ -37,7 +36,7 @@ router.post('/', (req, res) => {
       return res.status(403).send("User alerady exists");
     }
 
-    userModel.create(new userModel ({ username, password, role}));
+    userModel.create(new userModel({ username, password, role}));
 
     return res.status(200).send("");
   });
