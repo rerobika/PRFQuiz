@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import users from './user.js';
+import userModel from './user.js';
 
-const dbUrl = "mongodb://localhost:27017";
+const dbUrl = "mongodb://localhost:27017/PRFQuiz";
 
 export const connectDB = () => {
   return mongoose.connect(dbUrl);
@@ -15,6 +15,6 @@ mongoose.connection.on('error', (err) => {
   console.log('Mongo conn FAIL', err);
 });
 
-const models = { users };
+const models = { userModel };
 
 export default models;

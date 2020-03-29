@@ -13,16 +13,23 @@ import { HomeComponent } from './home/home.component';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientModule } from '@angular/common/http';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
+import { PlayerGuard } from './guards/player.guard';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 const appRoutes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
-  { path: 'admin', component: AdminComponent },
-  { path: 'quiz', component: QuizComponent },
-  { path: 'home', component: HomeComponent },
-  { path: '', redirectTo: "/home",  pathMatch: 'full' },
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
+  { path: 'quiz', component: QuizComponent, canActivate: [PlayerGuard] },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'welcome', component: WelcomeComponent },
+  { path: '', redirectTo: "/welcome",  pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
 
@@ -34,18 +41,21 @@ const appRoutes: Routes = [
     AdminComponent,
     QuizComponent,
     PageNotFoundComponent,
-    HomeComponent
+    HomeComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
-    ),
+    RouterModule.forRoot(appRoutes
+      // , { enableTracing: true }
+      ),
     MatInputModule,
     MatButtonModule,
+    MatSelectModule,
+    MatSnackBarModule,
     HttpClientModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

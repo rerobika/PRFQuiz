@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'mean-home',
+  selector: 'quiz-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

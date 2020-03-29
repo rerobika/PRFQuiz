@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'mean-admin',
+  selector: 'quiz-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })

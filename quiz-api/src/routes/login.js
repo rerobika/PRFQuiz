@@ -1,42 +1,40 @@
 import Router from 'express';
+import userModel from '../models/user'
 import passport from 'passport';
 import passportLocal from 'passport-local';
 
 const router = Router();
 
 router.post('/', (req, res) => {
-  if (req.body.username && req.body.password) {
-    passport.authenticate('local', (error, username) => {
-      if (error) {
-        return res.status(403).send(error);
-      }
-
-      req.logIn(username, (error, usr) => {
-        if (error) {
-          return res.status(500).send('Failed serilization');
-        }
-
-        return res.status(200).send('Login SUCC');
-      })
-    }) (req, res);
+  if (!req.body.username || !req.body.password) {
+    return res.status(403).send("Missing credentials");
   }
 
-  return res.status(400).send('Missing login credentials!');
+  passport.authenticate('local', (error, user) => {
+    if (error) {
+      return res.status(403).send(error);
+    }
+    req.logIn(user, (error) => {
+      if (error) {
+        return res.status(500).send('Serilization failed');
+      }
+
+      return res.status(200).json(user);
+    })
+  })(req, res)
 });
 
 passport.serializeUser((user, done) => {
-  if (!user) {
-    return done('User does not exist!');
-  }
-
-  return done(null, user);
+  return done(null, user._id);
 });
 
-passport.deserializeUser((user, done) => {
-  return done(null, user);
+passport.deserializeUser((_id, done) => {
+  userModel.findOne({_id}, (err, user) => {
+    return done(err, user);
+  })
 });
 
-passport.use('local', new passportLocal.Strategy((username, password, done) => {
+passport.use('local', new passportLocal.Strategy(function (username, password, done) {
   userModel.findOne({username: username}, (err, user) => {
     if (err || !user) {
       return done("User was not found", undefined);
@@ -45,11 +43,9 @@ passport.use('local', new passportLocal.Strategy((username, password, done) => {
       if (e) {
         return done("password comparison", undefined);
       }
-
       if (isMatch) {
         return done(null, user);
       }
-
       return done("Wrong password", undefined);
     });
   })

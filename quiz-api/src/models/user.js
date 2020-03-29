@@ -5,26 +5,21 @@ const userSchema = new mongoose.Schema({
   username: {type: String, unique: true, required: true},
   password: {type: String, required: true},
   role: {type: String, required: true}
-}, {collection: 'users'});
+});
 
 userSchema.pre('save', function(next) {
   let user = this;
   if (user.isModified('password')) {
-    bcrypt.genSalt(10, function(error, salt) {
-      if (error) {
-        return next(error);
+    bcrypt.hash(user.password, 10, function(err, hash) {
+      if (err) {
+        return next (err);
       }
-      bcrypt.hash(user.password, salt, function(err, hash) {
-        if (err) {
-          return next(err);
-        }
-        user.password = hash;
-        return next();
-      })
-    })
+      user.password = hash;
+      return next();
+    });
+  } else {
+    return next();
   }
-
-  return next();
 });
 
 userSchema.methods.comparePasswords = function(password, next) {
@@ -33,6 +28,6 @@ userSchema.methods.comparePasswords = function(password, next) {
   })
 };
 
-const user = mongoose.model('user', userSchema);
+const userModel = mongoose.model('user', userSchema);
 
-export default user;
+export default userModel;

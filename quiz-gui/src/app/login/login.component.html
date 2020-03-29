@@ -1,2 +1,25 @@
-<p>login works!</p>
-<div class="row">asd</div>
+<div>
+  <h1>Login</h1>
+</div>
+<div>
+  <div class="container">
+    <div class="center first-row horizontal-center">
+      <mat-form-field>
+        <input matInput #username type="string" value="">
+        <mat-hint>Username</mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="center second-row horizontal-center">
+      <mat-form-field>
+        <input matInput #password type="password" value="">
+        <mat-hint>Password</mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="center third-row horizontal-center">
+      <button mat-raised-button color="primary" (click)="onFormSubmit(username.value, password.value)">Login</button>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>
+
+

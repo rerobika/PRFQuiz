@@ -1,0 +1,36 @@
+.container {
+  width: 100%;
+  margin: 50px auto;
+  display: grid;
+  grid-template-columns: 30% auto 30%;
+  grid-template-rows: 100px 100px 100px 100px 100px;
+  grid-column-gap: 20px;
+}
+
+.center {
+  grid-column: 2/3;
+}
+
+.horizontal-center {
+  text-align: center;
+}
+
+.first-row {
+  grid-row: 1/5;
+}
+
+.second-row {
+  grid-row: 2/5;
+}
+
+.third-row {
+  grid-row: 3/5;
+}
+
+.fourth-row {
+  grid-row: 4/5;
+}
+
+.fifth-row {
+  grid-row: 5/5;
+}

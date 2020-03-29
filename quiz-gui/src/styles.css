@@ -1,1 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
+
+.container {
+  width: 85%;
+  margin: 50px auto;
+  display: grid;
+  grid-template-columns: 15% auto 30%;
+  grid-template-rows: 25% 250px 100px auto;
+  grid-column-gap: 20px;
+}
+
+.left {
+  grid-column: 1/2;
+}
+
+.center {
+  grid-column: 2/3;
+}
+
+.right {
+  grid-column: 3/4;
+}
+
+.first-row{
+  grid-row: 1/2;
+}
+
+.second-row{
+  grid-row: 2/3;
+}
+
+.third-row{
+  grid-row: 3/4;
+}
+
+.last-row{
+  grid-row: 4/5;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

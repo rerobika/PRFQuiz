@@ -1,1 +1,38 @@
-<p>register works!</p>
+<div>
+  <h1>Register</h1>
+</div>
+<div>
+  <div class="container">
+    <div class="center first-row horizontal-center">
+      <mat-form-field>
+        <input matInput #username type="string" value="">
+        <mat-hint>Username</mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="center second-row horizontal-center">
+      <mat-form-field>
+        <input matInput #password type="password" value="">
+        <mat-hint>Password</mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="center third-row horizontal-center">
+      <mat-form-field>
+        <input matInput #passwordConfirm type="password" value="">
+        <mat-hint>Password confirmation</mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="center fourth-row horizontal-center">
+      <mat-form-field>
+        <mat-label>Select role</mat-label>
+        <mat-select #role>
+          <mat-option value="player">Player</mat-option>
+          <mat-option value="admin">Admin</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="center fifth-row horizontal-center">
+      <button mat-raised-button color="primary" (click)="onFormSubmit(username.value, password.value, passwordConfirm.value, role.value)">Registrate</button>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>
