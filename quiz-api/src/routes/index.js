@@ -1,9 +1,9 @@
 import login from './login';
 import register from './register';
-import questions from './questions';
+import tests from './tests';
 
 export default {
     login,
     register,
-    questions,
+    tests,
 };

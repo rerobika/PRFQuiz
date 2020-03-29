@@ -7,15 +7,20 @@ export interface Answer {
   correct: boolean
 };
 
+export interface Test {
+  question: string,
+  answers: Array<Answer>
+};
+
 @Injectable({
   providedIn: 'root'
 })
-export class QuestionService {
+export class TestService {
 
   constructor(private http: HttpClient,) { }
 
-  addQuestion (question: string, answers: Array<Answer>) {
-    console.log("sent");
-    return this.http.post<any>(`${environment.apiUrl}/questions/add`, {question, answers});
+  addTest (test: Test) {
+    return this.http.post<any>(`${environment.apiUrl}/tests/add`, {test});
   }
+
 }

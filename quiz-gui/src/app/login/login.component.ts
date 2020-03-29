@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     this.userService.login(username, password)
     .pipe(first())
     .subscribe(data => {
-      this._snackBar.open("Succesful registration,", "please login", {
+      this._snackBar.open("Succesful,", "login", {
         duration: 2000,
       });
       this.router.navigateByUrl(this.returnUrl || this.userService.loginRedirect());

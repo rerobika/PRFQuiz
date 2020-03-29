@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { QuestionService, Answer } from '../services/question.service';
+import { TestService, Test } from '../services/test.service';
 import { first } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -22,16 +22,17 @@ const buttonDescs = [
 })
 
 export class AdminComponent implements OnInit {
-  answers: Array<Answer> = [];
-  question: string;
+  question: Test;
+  mode: BUTTON_MODE;
   upperButtonDesc: string;
   lowerButtonDesc: string;
-  mode: BUTTON_MODE;
 
-  constructor(private questionService: QuestionService,
+  constructor(private questionService: TestService,
               private _snackBar: MatSnackBar) {
     this.updateMode(BUTTON_MODE.INIT);
-   }
+    this.question = { question: "", answers: [] };
+    console.log (this.mode);
+  }
 
   ngOnInit(): void {
   }
@@ -48,7 +49,7 @@ export class AdminComponent implements OnInit {
         this.updateMode(BUTTON_MODE.QUESTION);
       }
       case BUTTON_MODE.QUESTION: {
-        this.answers.push({answer: "", correct : false});
+        this.question.answers.push({answer: "", correct : false});
         break;
       }
       default: {
@@ -57,24 +58,29 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  resetState () {
+    this.updateMode(BUTTON_MODE.INIT);
+    this.question = { question: "", answers: [] };
+  }
+
   onLowerButton() {
     switch (this.mode) {
       case BUTTON_MODE.INIT: {
         this.updateMode(BUTTON_MODE.QUIZ);
       }
       case BUTTON_MODE.QUIZ: {
-        this.answers.push({answer: "", correct : false});
+        this.question.answers.push({answer: "", correct : false});
         break;
       }
       default: {
-        this.questionService.addQuestion(this.question, this.answers)
+        this.questionService.addTest(this.question)
         .pipe(first())
         .subscribe(data => {
           this._snackBar.open("Save,", "question added", {
             duration: 2000,
           });
 
-          this.answers = [];
+
         }, err => {
           this._snackBar.open("Error:", err.error, {
             duration: 2000,

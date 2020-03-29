@@ -1,14 +1,12 @@
 
 import Router from 'express';
-import userModel from '../models/user'
-import questionModel from '../models/question';
+import testModel from '../models/test';
 
 const router = Router();
 
 router.post('/add', (req, res) => {
-  let {question, answers} = req.body;
-
   console.log (req.body);
+  let { test : {question, answers} } = req.body;
 
   if (!question || !answers)
   {
@@ -25,7 +23,7 @@ router.post('/add', (req, res) => {
     }
   }
 
-  questionModel.findOne({question}, (err, user) => {
+  testModel.findOne({question}, (err, user) => {
     if (err) {
       return res.status(500).send("Internal error");
     }
@@ -34,9 +32,19 @@ router.post('/add', (req, res) => {
       return res.status(403).send("Question alerady exists");
     }
 
-    questionModel.create(new questionModel ({ question, answers }));
+    testModel.create(new testModel ({ question, answers }));
 
     return res.status(200).send("");
+  });
+});
+
+router.get('/list', (req, res) => {
+  testModel.find({}, (err, tests) => {
+    if (err) {
+      return res.status(500).send("Internal error");
+    }
+
+    return res.status(200).json(tests);
   });
 });
 

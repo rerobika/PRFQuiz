@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
-const questionSchema = new mongoose.Schema({
+export const testSchema = new mongoose.Schema({
   question: {type: String, unique: true, required: true},
   asnwers: [{type: String, required: true},
             {type: Boolean, required: true}],
 });
 
-const questionModel = mongoose.model('question', questionSchema);
+const testModel = mongoose.model('test', testSchema);
 
-export default questionModel;
+export default testModel;
