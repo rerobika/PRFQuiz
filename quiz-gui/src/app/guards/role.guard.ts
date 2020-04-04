@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { CookieService } from '../services/cookie.service';
+import { UserService } from "../services/user.service"
+
 
 @Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate {
-    constructor(protected roles: Array<string>, protected router: Router, protected cookieService: CookieService) { }
+    constructor(protected roles: Array<string>, protected router: Router, protected userService: UserService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      if (this.roles.includes(this.cookieService.getCookie('user.role'))) {
-        return true;
-      }
-
-      console.log ("BACK to login");
-      this.router.navigate(['/login'], { queryParams: { returnUrl: route.routeConfig.path }});
-      return false;
+      return this.userService.user.toPromise()
+      .then(user => {
+        if (this.roles.includes(user.role)) {
+          return true;
+        }
+        this.router.navigate(['/login'], { queryParams: { returnUrl: route.routeConfig.path }});
+        return false;
+      }).catch(err => {
+        this.router.navigate(['/login'], { queryParams: { returnUrl: route.routeConfig.path }});
+        return false;
+      });
     }
 }

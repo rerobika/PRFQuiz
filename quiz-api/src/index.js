@@ -20,12 +20,14 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 app.use(expressSession({secret: 'epicSecretKey',
                         resave: false,
-                        saveUninitialized: true,
+                        saveUninitialized: false,
                        }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/auth', routes.auth);
 app.use('/login', routes.login);
+app.use('/logout', routes.logout);
 app.use('/register', routes.register);
 app.use('/tests', routes.tests);
 app.use('/quizzes', routes.quizzes);

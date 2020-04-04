@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { first } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -18,20 +17,18 @@ export class LoginComponent implements OnInit {
               private _snackBar: MatSnackBar) {}
 
   ngOnInit() {
-    this.userService.logout();
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
   }
 
   onFormSubmit(username: string, password: string): void {
     this.userService.login(username, password)
-    .pipe(first())
     .subscribe(data => {
       this._snackBar.open("Succesful,", "login", {
         duration: 2000,
       });
-      this.router.navigateByUrl(this.returnUrl || this.userService.loginRedirect());
+      this.router.navigateByUrl(this.returnUrl || data.role);
     }, err => {
-      this._snackBar.open("Error:", err.error, {
+      this._snackBar.open("Error:", err.message, {
         duration: 2000,
       });
     });
