@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { first } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -24,7 +23,6 @@ export class RegisterComponent implements OnInit {
 
   onFormSubmit(username: string, password: string, passwordConfirm: string, role: string): void {
     this.userService.register(username, password, passwordConfirm, role)
-    .pipe(first())
     .subscribe(data => {
       this._snackBar.open("Succesful registration,", "please login", {
         duration: 2000,

@@ -31,7 +31,7 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
   { path: 'quiz', component: QuizComponent, canActivate: [PlayerGuard] },
-  { path: 'player', component: PlayerComponent, canActivate: [AuthGuard] },
+  { path: 'player', component: PlayerComponent, canActivate: [PlayerGuard] },
   { path: 'welcome', component: WelcomeComponent },
   { path: '', redirectTo: "/welcome",  pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }

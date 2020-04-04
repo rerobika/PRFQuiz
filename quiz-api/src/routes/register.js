@@ -7,7 +7,6 @@ const router = Router();
 router.post('/', (req, res) => {
   let {username, password, passwordConfirm, role} = req.body;
 
-  console.log (req.body);
   if (!username
       || !password
       || !passwordConfirm

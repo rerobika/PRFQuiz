@@ -1,8 +1,10 @@
 
 import Router from 'express';
 import testModel from '../models/test';
+import { isAuthenticated } from './auth'
 
 const router = Router();
+router.use(isAuthenticated);
 
 router.post('/add', (req, res) => {
   let { test : {question, answers} } = req.body;
@@ -34,20 +36,18 @@ router.post('/add', (req, res) => {
       return res.status(403).send("Test already exists");
     }
 
-    testModel.create(new testModel({ question, answers }));
+    testModel.create(new testModel({ question, author: req.user, answers }));
 
     return res.status(200).send("");
   });
 });
 
 router.get('/list', (req, res) => {
-  console.log ("asd");
-  testModel.find({}, (err, tests) => {
+  testModel.find({author: req.user}, (err, tests) => {
     if (err) {
       return res.status(500).send("Internal error");
     }
 
-    console.log (tests);
     return res.status(200).json(tests);
   });
 });

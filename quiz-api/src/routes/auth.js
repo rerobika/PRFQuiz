@@ -5,14 +5,14 @@ import passportLocal from 'passport-local';
 
 const router = Router();
 
-export const isLoggedIn = (req, res, next) => {
+export const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
   return res.status(403).send("Unauthorized");
 }
 
-router.use(isLoggedIn);
+router.use(isAuthenticated);
 
 router.get('/user', (req, res) => {
   return res.status(200).send(req.user);

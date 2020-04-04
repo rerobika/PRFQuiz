@@ -1,8 +1,10 @@
 
 import Router from 'express';
 import quizModel from '../models/quiz';
+import { isAuthenticated } from './auth'
 
 const router = Router();
+router.use(isAuthenticated);
 
 router.post('/add', (req, res) => {
   let { quiz : {name, items} } = req.body;
@@ -15,7 +17,6 @@ router.post('/add', (req, res) => {
     return res.status(403).send("Empty quiz name");
   }
 
-  console.log (name);
   quizModel.findOne({name}, (err, quiz) => {
     console.log (err, quiz);
     if (err) {
@@ -38,7 +39,7 @@ router.post('/add', (req, res) => {
       return res.status(403).send("There must be at least one selected test");
     }
 
-    quizModel.create(new quizModel({ name, tests }));
+    quizModel.create(new quizModel({ name, author:req.user, tests }));
 
     return res.status(200).send("");
   });
