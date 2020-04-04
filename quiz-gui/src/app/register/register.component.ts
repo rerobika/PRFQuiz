@@ -18,6 +18,7 @@ export class RegisterComponent implements OnInit {
               private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
+    this.userService.logout();
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'login';
   }
 

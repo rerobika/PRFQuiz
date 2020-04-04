@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
               private _snackBar: MatSnackBar) {}
 
   ngOnInit() {
+    this.userService.logout();
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
   }
 
