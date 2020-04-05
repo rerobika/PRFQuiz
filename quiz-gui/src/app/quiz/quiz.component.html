@@ -1,1 +1,24 @@
-<p>quiz works!</p>
+<div>
+  <h1>Quiz</h1>
+</div>
+<div class="container">
+  <div class="center first-row">
+    <div *ngIf="quiz">
+      <div> Quiz: {{ quiz.name }}</div>
+    </div>
+  </div>
+  <div class="center second-row">
+    <!-- List of available quizzes -->
+    <div *ngIf="quiz">
+      <div *ngFor="let i of quiz.tests">
+        <div> {{i.question}}</div>
+        <div *ngFor="let a of i.answers">
+          <div>
+            <button mat-raised-button color="primary" >{{a.answer}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>

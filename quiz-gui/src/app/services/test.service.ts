@@ -26,7 +26,7 @@ export interface FilledQuiz {
 export interface Quiz {
   _id: number,
   name: string,
-  items: Array<QuizItem>,
+  tests: Array<QuizItem>,
   completed: Array<FilledQuiz>
 };
 
@@ -45,8 +45,16 @@ export class TestService {
     return this.http.get<any>(`${environment.apiUrl}/tests/list`);
   }
 
+  getTest (_id: string) {
+    return this.http.post<any>(`${environment.apiUrl}/tests/get`, {name});
+  }
+
   addQuiz (quiz: Quiz) {
     return this.http.post<any>(`${environment.apiUrl}/quizzes/add`, {quiz});
+  }
+
+  getQuiz (name: string) {
+    return this.http.post<Quiz>(`${environment.apiUrl}/quizzes/get`, {name});
   }
 
   listQuizzes () {

@@ -10,7 +10,7 @@
       <input matInput [(ngModel)]="test.question" type="string">
       <mat-hint>Question</mat-hint>
     </mat-form-field>
-    <mat-form-field *ngIf="quiz.items.length !== 0">
+    <mat-form-field *ngIf="quiz.tests.length !== 0">
       <input matInput [(ngModel)]="quiz.name" type="string">
       <mat-hint>Quiz name</mat-hint>
     </mat-form-field>
@@ -35,10 +35,10 @@
     </div>
 
     <!-- New Quiz -->
-    <div *ngFor="let q of quiz.items">
+    <div *ngFor="let q of quiz.tests">
       <mat-checkbox [(ngModel)]="q.active">{{q.test.question}}</mat-checkbox>
     </div>
-    <div *ngIf="quiz.items.length !== 0">
+    <div *ngIf="quiz.tests.length !== 0">
       <button mat-raised-button color="primary" (click)="addQuiz()">Save Quiz</button>
     </div>
   </div>

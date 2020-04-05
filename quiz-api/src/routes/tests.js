@@ -52,4 +52,14 @@ router.get('/list', (req, res) => {
   });
 });
 
+router.post('/get', (req, res) => {
+  testModel.findOne({_id: req.body._id}, (err, test) => {
+    if (err) {
+      return res.status(500).send("Internal error");
+    }
+
+    return res.status(200).json(test);
+  });
+});
+
 export default router;

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TestService, Quiz } from '../services/test.service';
 import { UserService, User } from '../services/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'quiz-player',
@@ -9,21 +10,21 @@ import { UserService, User } from '../services/user.service';
   styleUrls: ['./player.component.css']
 })
 export class PlayerComponent implements OnInit {
-  quizes: Array<Quiz> = [];
+  quizzes: Array<Quiz> = [];
   user: User;
 
 
   constructor(private testService: TestService,
               private userService: UserService,
-              private router: Router) {
+              private router: Router,
+              private _snackBar: MatSnackBar) {
     this.testService.listQuizzes().subscribe(data => {
-      this.quizes = data;
+      this.quizzes = data.quizzes;
+      this.user = data.user;
     }, err => {
-    })
-
-    this.userService.user.subscribe(data => {
-      this.user = data;
-    }, err => {
+      this._snackBar.open("Error:", err.error, {
+        duration: 2000,
+      });
     })
   }
 
@@ -42,7 +43,7 @@ export class PlayerComponent implements OnInit {
   }
 
   selectQuiz(q: Quiz) {
-    this.router.navigateByUrl(`/quiz/${q._id}`);
+    this.router.navigateByUrl(`/quiz/${q.name}`);
   }
 
 }

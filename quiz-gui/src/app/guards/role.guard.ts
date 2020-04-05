@@ -15,7 +15,7 @@ export class RoleGuard implements CanActivate {
         }
         throw new Error();
       }).catch(err => {
-        this.router.navigate(['/login'], { queryParams: { returnUrl: route.routeConfig.path }});
+        this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
         return false;
       });
     }

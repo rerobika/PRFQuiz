@@ -64,7 +64,7 @@ export class AdminComponent implements OnInit {
   resetState () {
     this.updateMode(BUTTON_MODE.INIT);
     this.test = { question: "", answers: [] };
-    this.quiz = { _id: 0, name: "", items: [], completed: []};
+    this.quiz = { _id: 0, name: "", tests: [], completed: []};
   }
 
   addAnswer () {
@@ -108,7 +108,7 @@ export class AdminComponent implements OnInit {
     .pipe(first())
     .subscribe(data => {
       for (let d of data) {
-        this.quiz.items.push ({test: d, active: false});
+        this.quiz.tests.push ({test: d, active: false});
       }
     }, err => {
       this._snackBar.open("Error:", err.error, {
