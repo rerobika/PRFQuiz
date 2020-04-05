@@ -30,7 +30,7 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
-  { path: 'quiz', component: QuizComponent, canActivate: [PlayerGuard] },
+  { path: 'quiz/:id', component: QuizComponent, canActivate: [PlayerGuard] },
   { path: 'player', component: PlayerComponent, canActivate: [PlayerGuard] },
   { path: 'welcome', component: WelcomeComponent },
   { path: '', redirectTo: "/welcome",  pathMatch: 'full' },

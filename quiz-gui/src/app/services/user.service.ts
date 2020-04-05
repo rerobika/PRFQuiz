@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
+export interface User {
+  username: string,
+  role: boolean
+};
+
 @Injectable({
   providedIn: 'root'
 })

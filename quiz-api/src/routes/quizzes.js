@@ -39,7 +39,7 @@ router.post('/add', (req, res) => {
       return res.status(403).send("There must be at least one selected test");
     }
 
-    quizModel.create(new quizModel({ name, author:req.user, tests }));
+    quizModel.create(new quizModel({ name, author: req.user, tests, completed: [] }));
 
     return res.status(200).send("");
   });

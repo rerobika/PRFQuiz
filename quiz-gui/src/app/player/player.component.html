@@ -1,1 +1,18 @@
-<p>player works!</p>
+<div>
+  <h1>Player</h1>
+</div>
+<div class="container">
+  <div class="center second-row">
+    <!-- List of available quizzes -->
+    <div *ngFor="let q of quizes">
+      <div> List of quizzes </div>
+      <div *ngIf="!isCompleted(q)">
+        <button mat-raised-button color="primary" (click)="selectQuiz(q)">{{q.name}}</button>
+      </div>
+      <div *ngIf="isCompleted(q)">
+        <button mat-raised-button color="primary" disabled>{{q.name}}: {{getScore(q)}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>

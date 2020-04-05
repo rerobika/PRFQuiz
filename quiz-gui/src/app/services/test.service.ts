@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import {  User } from './user.service';
 
 export interface Answer {
   answer: string,
@@ -17,9 +18,16 @@ export interface QuizItem {
   active: boolean
 };
 
+export interface FilledQuiz {
+  filler: User,
+  score: number
+};
+
 export interface Quiz {
+  _id: number,
   name: string,
-  items: Array<QuizItem>
+  items: Array<QuizItem>,
+  completed: Array<FilledQuiz>
 };
 
 @Injectable({
@@ -39,6 +47,10 @@ export class TestService {
 
   addQuiz (quiz: Quiz) {
     return this.http.post<any>(`${environment.apiUrl}/quizzes/add`, {quiz});
+  }
+
+  listQuizzes () {
+    return this.http.get<any>(`${environment.apiUrl}/quizzes/list`);
   }
 
 }

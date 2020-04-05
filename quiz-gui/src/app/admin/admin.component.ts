@@ -64,7 +64,7 @@ export class AdminComponent implements OnInit {
   resetState () {
     this.updateMode(BUTTON_MODE.INIT);
     this.test = { question: "", answers: [] };
-    this.quiz = { name: "", items: [] };
+    this.quiz = { _id: 0, name: "", items: [], completed: []};
   }
 
   addAnswer () {
