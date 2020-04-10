@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TestService, Test, Quiz } from '../services/test.service';
+import { TestService, Test } from '../services/test.service';
+import { QuizService, Quiz } from '../services/quiz.service';
 import { UserService } from '../services/user.service';
 import { first } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -31,6 +32,7 @@ export class AdminComponent implements OnInit {
   lowerButtonDesc: string;
 
   constructor(private testService: TestService,
+              private quizService: QuizService,
               private userService: UserService,
               private router: Router,
               private _snackBar: MatSnackBar) {
@@ -97,7 +99,7 @@ export class AdminComponent implements OnInit {
   }
 
   addQuiz () {
-    this.testService.addQuiz(this.quiz)
+    this.quizService.addQuiz(this.quiz)
     .pipe(first())
     .subscribe(data => {
       this._snackBar.open("Save,", "Quiz added", {

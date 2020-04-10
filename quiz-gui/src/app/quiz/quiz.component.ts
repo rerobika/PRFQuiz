@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { TestService, Quiz, Answer, QuizResult } from '../services/test.service';
-import { UserService } from '../services/user.service';
+import { Router } from '@angular/router';
+import { Answer} from '../services/test.service';
+import { QuizService, Quiz, QuizResult } from '../services/quiz.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -14,13 +14,12 @@ export class QuizComponent implements OnInit {
   quiz: Quiz = null;
   showCorrect: boolean = false;
 
-  constructor(private testService: TestService,
-              private userService: UserService,
+  constructor(private quizService: QuizService,
               private router: Router,
               private _snackBar: MatSnackBar) {
 
     let name = decodeURI(this.router.url.split('/quiz/')[1]);
-    this.testService.getQuiz(name).subscribe(data => {
+    this.quizService.getQuiz(name).subscribe(data => {
       this.quiz = data;
     }, err => {
       this._snackBar.open("Error:", err.error, {
@@ -47,7 +46,6 @@ export class QuizComponent implements OnInit {
       return answer.selected ? "selected" : "deselected";
     }
   }
-  // ✓
 
   onSubmit(): void {
     if (this.showCorrect) {
@@ -62,7 +60,7 @@ export class QuizComponent implements OnInit {
       }
     }
 
-    this.testService.submitQuiz(result).subscribe(data => {
+    this.quizService.submitQuiz(result).subscribe(data => {
       this.showCorrect = true;
       this._snackBar.open("Score:", data.score, {
         duration: 2000,

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TestService, Quiz } from '../services/test.service';
+import { QuizService, Quiz } from '../services/quiz.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../services/user.service';
 
@@ -13,11 +13,11 @@ export class PlayerComponent implements OnInit {
   quizzes: Array<Quiz> = [];
   scores: Array<number> = [];
 
-  constructor(private testService: TestService,
+  constructor(private quizService: QuizService,
               private userService: UserService,
               private router: Router,
               private _snackBar: MatSnackBar) {
-    this.testService.listQuizzes().subscribe(data => {
+    this.quizService.listQuizzes().subscribe(data => {
       this.quizzes = data.quizzes;
       this.scores = data.scores;
     }, err => {
