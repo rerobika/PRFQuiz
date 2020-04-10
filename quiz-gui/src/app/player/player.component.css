@@ -26,3 +26,7 @@
 .first-row {
   grid-row: 1/2;
 }
+
+.separator {
+  margin-bottom: 15px;
+}

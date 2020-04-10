@@ -6,16 +6,13 @@ import {  User } from './user.service';
 export interface Answer {
   answer: string,
   correct: boolean
+  selected?: boolean
 };
 
 export interface Test {
   question: string,
-  answers: Array<Answer>
-};
-
-export interface QuizItem {
-  test: Test,
-  active: boolean
+  answers: Array<Answer>,
+  active?: boolean
 };
 
 export interface FilledQuiz {
@@ -24,10 +21,14 @@ export interface FilledQuiz {
 };
 
 export interface Quiz {
-  _id: number,
   name: string,
-  tests: Array<QuizItem>,
-  completed: Array<FilledQuiz>
+  tests: Array<Test>,
+  score?: number,
+};
+
+export interface QuizResult {
+  quizName: string,
+  choices: Array<boolean>
 };
 
 @Injectable({
@@ -42,11 +43,7 @@ export class TestService {
   }
 
   listTests () {
-    return this.http.get<any>(`${environment.apiUrl}/tests/list`);
-  }
-
-  getTest (_id: string) {
-    return this.http.post<any>(`${environment.apiUrl}/tests/get`, {name});
+    return this.http.get<Array<Test>>(`${environment.apiUrl}/tests/list`);
   }
 
   addQuiz (quiz: Quiz) {
@@ -61,4 +58,7 @@ export class TestService {
     return this.http.get<any>(`${environment.apiUrl}/quizzes/list`);
   }
 
+  submitQuiz (result: QuizResult) {
+    return this.http.post<any>(`${environment.apiUrl}/quizzes/submit`, result);
+  }
 }

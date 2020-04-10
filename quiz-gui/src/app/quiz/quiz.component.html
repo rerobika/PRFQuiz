@@ -10,15 +10,16 @@
   <div class="center second-row">
     <!-- List of available quizzes -->
     <div *ngIf="quiz">
-      <div *ngFor="let i of quiz.tests">
-        <div> {{i.question}}</div>
+      <div *ngFor="let i of quiz.tests; let idx=index">
+        <div> Q{{idx + 1}}: {{i.question}}</div>
         <div *ngFor="let a of i.answers">
           <div>
-            <button mat-raised-button color="primary" >{{a.answer}}</button>
+            <button mat-raised-button class="{{answerColor(a)}} separator" (click)="toggleAnswer(a)" >{{a.answer}}</button>
           </div>
         </div>
       </div>
     </div>
+    <button mat-raised-button color="primary" (click)="onSubmit()">{{this.showCorrect ? "Back" : "Submit" }}</button>
   </div>
 </div>
 <router-outlet></router-outlet>

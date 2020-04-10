@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TestService, Quiz } from '../services/test.service';
-import { UserService, User } from '../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -11,16 +10,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class PlayerComponent implements OnInit {
   quizzes: Array<Quiz> = [];
-  user: User;
-
+  scores: Array<number> = [];
 
   constructor(private testService: TestService,
-              private userService: UserService,
               private router: Router,
               private _snackBar: MatSnackBar) {
     this.testService.listQuizzes().subscribe(data => {
       this.quizzes = data.quizzes;
-      this.user = data.user;
+      this.scores = data.scores;
+      console.log(this.quizzes);
     }, err => {
       this._snackBar.open("Error:", err.error, {
         duration: 2000,
@@ -29,18 +27,6 @@ export class PlayerComponent implements OnInit {
   }
 
   ngOnInit(): void { }
-
-  isCompleted(q: Quiz): boolean {
-    if (q.completed.length == 0 || !this.user) {
-      return false;
-    }
-
-    return q.completed.findIndex(e => e.filler.username == this.user.username) != -1;
-  }
-
-  getScore(q): string {
-    return q.completed.find(e => e.filler.username == this.user.username).score.toString();
-  }
 
   selectQuiz(q: Quiz) {
     this.router.navigateByUrl(`/quiz/${q.name}`);

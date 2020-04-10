@@ -35,7 +35,7 @@ router.post('/', (req, res) => {
       return res.status(403).send("User alerady exists");
     }
 
-    userModel.create(new userModel({ username, password, role}));
+    userModel.create(new userModel({ username, password, role, filledQuizzes: []}));
 
     return res.status(200).send("");
   });

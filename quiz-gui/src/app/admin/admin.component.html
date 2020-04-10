@@ -36,7 +36,7 @@
 
     <!-- New Quiz -->
     <div *ngFor="let q of quiz.tests">
-      <mat-checkbox [(ngModel)]="q.active">{{q.test.question}}</mat-checkbox>
+      <mat-checkbox [(ngModel)]="q.active">{{q.question}}</mat-checkbox>
     </div>
     <div *ngIf="quiz.tests.length !== 0">
       <button mat-raised-button color="primary" (click)="addQuiz()">Save Quiz</button>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TestService, Quiz } from '../services/test.service';
+import { TestService, Quiz, Answer, QuizResult } from '../services/test.service';
 import { UserService } from '../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class QuizComponent implements OnInit {
   quiz: Quiz = null;
+  showCorrect: boolean = false;
 
   constructor(private testService: TestService,
               private userService: UserService,
@@ -18,7 +19,6 @@ export class QuizComponent implements OnInit {
               private _snackBar: MatSnackBar) {
 
     let name = decodeURI(this.router.url.split('/quiz/')[1]);
-    console.log(name);
     this.testService.getQuiz(name).subscribe(data => {
       console.log(data);
       this.quiz = data;
@@ -32,8 +32,43 @@ export class QuizComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getTest(_id: string) {
-    this.testService.getTest(_id);
+  toggleAnswer(answer: Answer) : void {
+    answer.selected = !answer.selected;
+  }
+
+  answerColor(answer: Answer) : string {
+    if (this.showCorrect) {
+      return (answer.correct) ? "correct" : "wrong";
+    } else {
+      return answer.selected ? "selected" : "deselected";
+    }
+  }
+  // ✓
+
+  onSubmit(): void {
+    if (this.showCorrect) {
+      
+    }
+
+    let result = <QuizResult> { quizName: this.quiz.name, choices: []};
+
+    for (let i of this.quiz.tests) {
+      for (let a of i.answers) {
+        result.choices.push(a.selected || false);
+      }
+    }
+
+    this.testService.submitQuiz(result).subscribe(data => {
+      this.showCorrect = true;
+      this._snackBar.open("Score:", data.score, {
+        duration: 2000,
+      });
+      alert(data.score);
+    }, err => {
+      this._snackBar.open("Error:", err.error, {
+        duration: 2000,
+      });
+    });
   }
 
 }

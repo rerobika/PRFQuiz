@@ -26,3 +26,20 @@
 .first-row {
   grid-row: 1/2;
 }
+
+.deselected {
+  background: #673ab7;
+  color: white;
+}
+
+.selected {
+  background: orange;
+}
+
+.correct {
+  background-color: green;
+}
+
+.wrong {
+  background-color: red;
+}

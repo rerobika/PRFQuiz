@@ -3,6 +3,7 @@ import Router from 'express';
 import quizModel from '../models/quiz';
 import testModel from '../models/test';
 import { isAuthenticated } from './auth'
+import userModel from '../models/user';
 
 const router = Router();
 router.use(isAuthenticated);
@@ -29,17 +30,24 @@ router.post('/add', (req, res) => {
 
     let activeTests = [];
 
-    for (let i of tests) {
-      if (i.active) {
-        activeTests.push(i.test);
+    for (let t of tests) {
+      if (t.active) {
+        activeTests.push(t);
       }
     }
+
+    console.log(activeTests);
+
+    for (let t of activeTests) {
+      delete t.active;
+    }
+    console.log(activeTests);
 
     if (activeTests.length === 0) {
       return res.status(403).send("There must be at least one selected test");
     }
 
-    quizModel.create(new quizModel({ name, author: req.user, tests: activeTests, completed: [] }));
+    quizModel.create(new quizModel({ name, author: req.user, tests: activeTests }));
 
     return res.status(200).send("");
   });
@@ -51,7 +59,19 @@ router.get('/list', (req, res) => {
       return res.status(500).send("Internal error");
     }
 
-    return res.status(200).json({quizzes, user: req.user});
+    let scores = [];
+
+    for (let q of quizzes) {
+      const foundQuiz = req.user.filledQuizzes.find(e => e.quiz == q._id);
+
+      if (foundQuiz) {
+        scores.push(foundQuiz.score);
+      } else {
+        scores.push(-1);
+      }
+    }
+
+    return res.status(200).send({quizzes, scores});
   });
 });
 
@@ -66,14 +86,14 @@ router.post('/get', (req, res) => {
       return res.status(403).send("Cannot find quiz");
     }
 
-    if (quiz.completed.findIndex(e => e.user == req.user) != -1) {
+    if (req.user.filledQuizzes.findIndex(e => e.quiz == quiz) != -1) {
       return res.status(403).send("Quiz has been already filled");
     }
 
     let quizTests = [];
 
     for (let t of quiz.tests) {
-      testModel.findOne({_id: t._id}, (err, test) => {
+      testModel.findOne({_id: t}, (err, test) => {
         if (err) {
           return res.status(500).send("Internal error");
         }
@@ -81,7 +101,6 @@ router.post('/get', (req, res) => {
 
         if (quizTests.length == quiz.tests.length) {
           quiz.tests = quizTests;
-          console.log("OK", quizTests.length);
           return res.status(200).json(quiz);
         }
       });
@@ -89,5 +108,57 @@ router.post('/get', (req, res) => {
   });
 });
 
+router.post('/submit', (req, res) => {
+  let { choices, quizName } = req.body;
+  quizModel.findOne({name: quizName}, (err, quiz) => {
+    if (err) {
+      return res.status(500).send("Internal error");
+    }
+
+    if (!quiz) {
+      return res.status(403).send("Cannot find quiz");
+    }
+
+    if (req.user.filledQuizzes.findIndex(e => e.quiz == quiz) != -1) {
+      return res.status(403).send("Quiz has been already filled");
+    }
+
+    let score = 0;
+    let choiceIdx = 0;
+
+    for (let t of quiz.tests) {
+      testModel.findOne({_id: t}, (err, test) => {
+        if (err) {
+          return res.status(500).send("Internal error");
+        }
+
+        if (!test) {
+          return res.status(403).send("Cannot find test");
+        }
+
+        let passed = true;
+        for (let a of test.answers) {
+          if (a.correct != choices[choiceIdx++]) {
+            passed = false;
+          }
+        }
+
+        if (passed) {
+          score++;
+        }
+
+        if (choiceIdx == choices.length) {
+          req.user.filledQuizzes.push({ quiz, score });
+          userModel.update({_id: req.user._id}, req.user, (err, doc) => {
+            if (err) {
+              return res.status(500).send("Internal error");
+            }
+            return res.status(200).json({score});
+          });
+        }
+      });
+    }
+  });
+});
 
 export default router;
