@@ -1,18 +1,28 @@
 <div>
   <h1>Player</h1>
 </div>
+<mat-card>
+  <button mat-raised-button class="buttonPadding" color="primary" (click)="logout()">Logout</button>
+</mat-card>
 <div class="container">
   <div class="center second-row">
     <!-- List of available quizzes -->
-    <div> List of quizzes </div>
-    <div *ngFor="let q of quizzes; let idx = index">
-      <div *ngIf="scores[idx] == -1">
-        <button mat-raised-button class="separator" color="primary" (click)="selectQuiz(q)">{{q.name}}</button>
-      </div>
-      <div *ngIf="scores[idx] != -1">
-        <button mat-raised-button class="separator" color="primary" disabled>{{q.name}}: {{scores[idx]}}</button>
-      </div>
-    </div>
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>List of quizzes</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let q of quizzes; let idx = index">
+          <div *ngIf="scores[idx] == -1">
+            <button mat-raised-button class="separator" color="primary" (click)="selectQuiz(q)">{{q.name}}</button>
+          </div>
+          <div *ngIf="scores[idx] != -1">
+            <button mat-raised-button class="separator" color="primary" disabled>{{q.name}}: {{scores[idx]}} points</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
   </div>
 </div>
 <router-outlet></router-outlet>

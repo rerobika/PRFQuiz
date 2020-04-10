@@ -36,12 +36,9 @@ router.post('/add', (req, res) => {
       }
     }
 
-    console.log(activeTests);
-
     for (let t of activeTests) {
       delete t.active;
     }
-    console.log(activeTests);
 
     if (activeTests.length === 0) {
       return res.status(403).send("There must be at least one selected test");

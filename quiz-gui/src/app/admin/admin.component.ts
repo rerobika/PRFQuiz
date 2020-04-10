@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TestService, Test, Quiz } from '../services/test.service';
+import { UserService } from '../services/user.service';
 import { first } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 enum BUTTON_MODE {
   INIT = 0,
@@ -29,8 +31,15 @@ export class AdminComponent implements OnInit {
   lowerButtonDesc: string;
 
   constructor(private testService: TestService,
+              private userService: UserService,
+              private router: Router,
               private _snackBar: MatSnackBar) {
     this.resetState ();
+  }
+
+  logout(): void {
+    this.userService.logout();
+    this.router.navigateByUrl('welcome')
   }
 
   ngOnInit(): void {

@@ -13,7 +13,7 @@ export class RoleGuard implements CanActivate {
         if (this.roles.includes(user.role)) {
           return true;
         }
-        throw new Error();
+        throw false;
       }).catch(err => {
         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
         return false;

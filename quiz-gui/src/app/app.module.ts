@@ -17,10 +17,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { PlayerGuard } from './guards/player.guard';
 import { WelcomeComponent } from './welcome/welcome.component';
@@ -61,6 +63,9 @@ const appRoutes: Routes = [
     MatRadioModule,
     MatDividerModule,
     HttpClientModule,
+    MatExpansionModule,
+    MatCardModule,
+    MatToolbarModule,
     BrowserAnimationsModule,
     FormsModule
   ],

@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./quiz.component.css']
 })
 export class QuizComponent implements OnInit {
+  panelOpenState = false;
   quiz: Quiz = null;
   showCorrect: boolean = false;
 
@@ -20,13 +21,16 @@ export class QuizComponent implements OnInit {
 
     let name = decodeURI(this.router.url.split('/quiz/')[1]);
     this.testService.getQuiz(name).subscribe(data => {
-      console.log(data);
       this.quiz = data;
     }, err => {
       this._snackBar.open("Error:", err.error, {
         duration: 2000,
       });
     })
+  }
+
+  back(): void {
+    this.router.navigateByUrl('player')
   }
 
   ngOnInit(): void {
@@ -47,7 +51,7 @@ export class QuizComponent implements OnInit {
 
   onSubmit(): void {
     if (this.showCorrect) {
-      
+
     }
 
     let result = <QuizResult> { quizName: this.quiz.name, choices: []};

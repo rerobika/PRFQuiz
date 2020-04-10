@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TestService, Quiz } from '../services/test.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'quiz-player',
@@ -13,17 +14,22 @@ export class PlayerComponent implements OnInit {
   scores: Array<number> = [];
 
   constructor(private testService: TestService,
+              private userService: UserService,
               private router: Router,
               private _snackBar: MatSnackBar) {
     this.testService.listQuizzes().subscribe(data => {
       this.quizzes = data.quizzes;
       this.scores = data.scores;
-      console.log(this.quizzes);
     }, err => {
       this._snackBar.open("Error:", err.error, {
         duration: 2000,
       });
     })
+  }
+
+  logout(): void {
+    this.userService.logout();
+    this.router.navigateByUrl('welcome')
   }
 
   ngOnInit(): void { }

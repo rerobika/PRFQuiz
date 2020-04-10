@@ -1,25 +1,52 @@
 <div>
   <h1>Quiz</h1>
 </div>
+<mat-card>
+  <button mat-raised-button class="buttonPadding" color="primary" (click)="back()">Back</button>
+</mat-card>
 <div class="container">
   <div class="center first-row">
-    <div *ngIf="quiz">
-      <div> Quiz: {{ quiz.name }}</div>
-    </div>
-  </div>
-  <div class="center second-row">
-    <!-- List of available quizzes -->
-    <div *ngIf="quiz">
-      <div *ngFor="let i of quiz.tests; let idx=index">
-        <div> Q{{idx + 1}}: {{i.question}}</div>
-        <div *ngFor="let a of i.answers">
-          <div>
-            <button mat-raised-button class="{{answerColor(a)}} separator" (click)="toggleAnswer(a)" >{{a.answer}}</button>
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>Quiz</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="quiz">
+          <div> Quiz: {{ quiz.name }}</div>
+        </div>
+
+        <!-- List of available quizzes -->
+        <div *ngIf="quiz">
+          <div *ngFor="let i of quiz.tests; let idx=index">
+            <mat-accordion>
+            <mat-expansion-panel (opened)="panelOpenState = true"
+                               (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Q{{idx + 1}}: {{i.question}}
+              </mat-panel-title>
+              <mat-panel-description>
+                Some description
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div *ngFor="let a of i.answers">
+              <div>
+                <button mat-raised-button class="{{answerColor(a)}} separator" (click)="toggleAnswer(a)" >{{a.answer}}</button>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          </mat-accordion>
           </div>
         </div>
-      </div>
-    </div>
-    <button mat-raised-button color="primary" (click)="onSubmit()">{{this.showCorrect ? "Back" : "Submit" }}</button>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="onSubmit()">{{this.showCorrect ? "Back" : "Submit" }}</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  <div class="center second-row">
+
+  <!-- empty -->
   </div>
 </div>
 <router-outlet></router-outlet>
