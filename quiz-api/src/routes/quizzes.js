@@ -56,19 +56,34 @@ router.get('/list', (req, res) => {
       return res.status(500).send("Internal error");
     }
 
-    let scores = [];
-
-    for (let q of quizzes) {
-      const foundQuiz = req.user.filledQuizzes.find(e => e.quiz == q._id);
-
-      if (foundQuiz) {
-        scores.push(foundQuiz.score);
-      } else {
-        scores.push(-1);
-      }
+    if (!quizzes) {
+      return res.status(500).send("Quizzes not found");
     }
 
-    return res.status(200).send({quizzes, scores});
+    let scores = [];
+
+    userModel.findOne({username: req.user.username}, (err, user) => {
+      if (err) {
+        return res.status(500).send("Internal error");
+      }
+
+      if (!user) {
+        return res.status(500).send("User not found");
+      }
+
+      for (let q of quizzes) {
+        let score = -1;
+        for (let fq of user.filledQuizzes) {
+          if (q._id.toString() == fq.quiz.toString()) {
+            score = fq.score;
+            break;
+          }
+        }
+        scores.push(score);
+      }
+
+      return res.status(200).send({quizzes, scores});
+    });
   });
 });
 
@@ -83,25 +98,35 @@ router.post('/get', (req, res) => {
       return res.status(403).send("Cannot find quiz");
     }
 
-    if (req.user.filledQuizzes.findIndex(e => e.quiz == quiz._id) != -1) {
-      return res.status(403).send("Quiz has been already filled");
-    }
+    userModel.findOne({username: req.user.username}, (err, user) => {
+      if (err) {
+        return res.status(500).send("Internal error");
+      }
 
-    let quizTests = [];
+      if (!user) {
+        return res.status(500).send("User not found");
+      }
 
-    for (let t of quiz.tests) {
-      testModel.findOne({_id: t}, (err, test) => {
-        if (err) {
-          return res.status(500).send("Internal error");
-        }
-        quizTests.push(test);
+      if (user.filledQuizzes.findIndex(e => e.quiz == quiz._id) != -1) {
+        return res.status(403).send("Quiz has been already filled");
+      }
 
-        if (quizTests.length == quiz.tests.length) {
-          quiz.tests = quizTests;
-          return res.status(200).json(quiz);
-        }
-      });
-    }
+      let quizTests = [];
+
+      for (let t of quiz.tests) {
+        testModel.findOne({_id: t}, (err, test) => {
+          if (err) {
+            return res.status(500).send("Internal error");
+          }
+          quizTests.push(test);
+
+          if (quizTests.length == quiz.tests.length) {
+            quiz.tests = quizTests;
+            return res.status(200).json(quiz);
+          }
+        });
+      }
+    });
   });
 });
 
@@ -116,45 +141,58 @@ router.post('/submit', (req, res) => {
       return res.status(403).send("Cannot find quiz");
     }
 
-    if (req.user.filledQuizzes.findIndex(e => e.quiz == quiz) != -1) {
-      return res.status(403).send("Quiz has been already filled");
-    }
+    userModel.findOne({username: req.user.username}, (err, user) => {
+      if (err) {
+        return res.status(500).send("Internal error");
+      }
 
-    let score = 0;
-    let choiceIdx = 0;
+      if (!user) {
+        return res.status(500).send("User not found");
+      }
 
-    for (let t of quiz.tests) {
-      testModel.findOne({_id: t}, (err, test) => {
-        if (err) {
-          return res.status(500).send("Internal error");
-        }
+      if (user.filledQuizzes.findIndex(e => e.quiz == quiz) != -1) {
+        return res.status(403).send("Quiz has been already filled");
+      }
 
-        if (!test) {
-          return res.status(403).send("Cannot find test");
-        }
+      let score = 0;
+      let choiceIdx = 0;
 
-        let passed = true;
-        for (let a of test.answers) {
-          if (a.correct != choices[choiceIdx++]) {
-            passed = false;
+      for (let t of quiz.tests) {
+        testModel.findOne({_id: t}, (err, test) => {
+          if (err) {
+            return res.status(500).send("Internal error");
           }
-        }
 
-        if (passed) {
-          score++;
-        }
+          if (!test) {
+            return res.status(403).send("Cannot find test");
+          }
 
-        if (choiceIdx == choices.length) {
-          req.user.filledQuizzes.push({ quiz, score });
-          userModel.update({_id: req.user._id}, req.user, (err, doc) => {
-            if (err) {
-              return res.status(500).send("Internal error");
+          let passed = true;
+          for (let a of test.answers) {
+            if (a.correct != choices[choiceIdx++]) {
+              passed = false;
             }
-            return res.status(200).json({score});
-          });
-        }
-      });
-    }
+          }
+
+          if (passed) {
+            score++;
+          }
+
+          if (choiceIdx == choices.length) {
+            const updated = {
+              filledQuizzes: Array.from(user.filledQuizzes)
+            }
+            updated.filledQuizzes.push({ quiz, score });
+            userModel.updateOne({_id: req.user._id}, updated, (err, doc) => {
+              if (err) {
+                return res.status(500).send("Internal error");
+              }
+              return res.status(200).json({score});
+            });
+          }
+        });
+      }
+    });
   });
 });
 

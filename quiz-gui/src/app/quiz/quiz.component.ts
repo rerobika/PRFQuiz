@@ -17,7 +17,6 @@ export class QuizComponent implements OnInit {
   constructor(private quizService: QuizService,
               private router: Router,
               private _snackBar: MatSnackBar) {
-
     let name = decodeURI(this.router.url.split('/quiz/')[1]);
     this.quizService.getQuiz(name).subscribe(data => {
       this.quiz = data;
@@ -49,6 +48,10 @@ export class QuizComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.showCorrect) {
+      this.back();
+      return;
+    }
     let result = <QuizResult> { quizName: this.quiz.name, choices: []};
 
     for (let i of this.quiz.tests) {
@@ -59,10 +62,10 @@ export class QuizComponent implements OnInit {
 
     this.quizService.submitQuiz(result).subscribe(data => {
       this.showCorrect = true;
+      debugger;
       this._snackBar.open("Score:", data.score, {
         duration: 2000,
       });
-      alert(data.score);
     }, err => {
       this._snackBar.open("Error:", err.error, {
         duration: 2000,

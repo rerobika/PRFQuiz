@@ -32,7 +32,8 @@ export class PlayerComponent implements OnInit {
     this.router.navigateByUrl('welcome')
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   selectQuiz(q: Quiz) {
     this.router.navigateByUrl(`/quiz/${q.name}`);
