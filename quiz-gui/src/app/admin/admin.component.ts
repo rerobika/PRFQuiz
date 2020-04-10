@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { TestService, Test } from '../services/test.service';
 import { QuizService, Quiz } from '../services/quiz.service';
 import { UserService } from '../services/user.service';
-import { first } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
@@ -84,7 +83,6 @@ export class AdminComponent implements OnInit {
 
   addTest () {
     this.testService.addTest(this.test)
-    .pipe(first())
     .subscribe(data => {
       this._snackBar.open("Save,", "Test added", {
         duration: 2000,
@@ -100,7 +98,6 @@ export class AdminComponent implements OnInit {
 
   addQuiz () {
     this.quizService.addQuiz(this.quiz)
-    .pipe(first())
     .subscribe(data => {
       this._snackBar.open("Save,", "Quiz added", {
         duration: 2000,
@@ -116,7 +113,6 @@ export class AdminComponent implements OnInit {
 
   getTests () {
     this.testService.listTests()
-    .pipe(first())
     .subscribe(data => {
         this.quiz.tests = data;
     }, err => {

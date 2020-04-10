@@ -83,7 +83,7 @@ router.post('/get', (req, res) => {
       return res.status(403).send("Cannot find quiz");
     }
 
-    if (req.user.filledQuizzes.findIndex(e => e.quiz == quiz) != -1) {
+    if (req.user.filledQuizzes.findIndex(e => e.quiz == quiz._id) != -1) {
       return res.status(403).send("Quiz has been already filled");
     }
 

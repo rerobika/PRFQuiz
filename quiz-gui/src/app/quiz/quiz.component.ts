@@ -25,6 +25,7 @@ export class QuizComponent implements OnInit {
       this._snackBar.open("Error:", err.error, {
         duration: 2000,
       });
+      this.back();
     })
   }
 
@@ -48,10 +49,6 @@ export class QuizComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.showCorrect) {
-
-    }
-
     let result = <QuizResult> { quizName: this.quiz.name, choices: []};
 
     for (let i of this.quiz.tests) {
@@ -72,5 +69,4 @@ export class QuizComponent implements OnInit {
       });
     });
   }
-
 }
